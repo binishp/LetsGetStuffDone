@@ -30,8 +30,8 @@ The following **additional** features are implemented:
 ## Video Walkthrough 
 
 Here's a walkthrough of implemented user stories:
-<blockquote class="imgur-embed-pub" lang="en" data-id="a/qzkie"><a href="//imgur.com/qzkie"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
-<img src='http://imgur.com/a/qzkie' title='LetsGetStuffDoneVideo Walkthrough' width='' alt='Video Walkthrough' />
+
+<img src='http://imgur.com/gallery/qzkie' title='LetsGetStuffDoneVideo Walkthrough' width='20' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
