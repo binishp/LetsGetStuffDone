@@ -1,6 +1,8 @@
 package todo.com.letsgetstuffdone;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -39,15 +41,33 @@ public class DoIt extends AppCompatActivity {
         // Below code will delete the TODO on long click
         list_todos.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                todoItems.remove(position);
-                todoAdapter.notifyDataSetChanged();
-                Toast.makeText(DoIt.this, "TODO removed", Toast.LENGTH_SHORT).show();
-                try {
-                    writeTodoToFile();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(DoIt.this);
+                builder1.setTitle("Confirm");
+                builder1.setMessage("Are you sure you want to delete?");
+                builder1.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        todoItems.remove(position);
+                        todoAdapter.notifyDataSetChanged();
+                        Toast.makeText(DoIt.this, "TODO removed", Toast.LENGTH_SHORT).show();
+                        try {
+                            writeTodoToFile();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+                builder1.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                       // Toast.makeText(DoIt.this, "TODO")
+                    }
+                });
+                AlertDialog alertDialog = builder1.create();
+                alertDialog.show();
+
                 return true;
             }
         });
