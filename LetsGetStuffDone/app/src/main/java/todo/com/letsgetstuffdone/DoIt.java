@@ -2,9 +2,10 @@ package todo.com.letsgetstuffdone;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,12 +19,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class DoIt extends AppCompatActivity {
+public class DoIt extends FragmentActivity implements EditTODODialog.EditTODOListner {
+    private final int REQUEST_CODE = 200;
     EditText editText;
     ListView list_todos;
     ArrayList<String> todoItems;
     ArrayAdapter<String> todoAdapter;
-    private final int REQUEST_CODE = 200;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,10 +76,18 @@ public class DoIt extends AppCompatActivity {
         list_todos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                launchEditScreen(todoItems.get(position).toString(), position);
+                // launchEditScreen(todoItems.get(position).toString(), position);
+                Bundle arg = new Bundle();
+                arg.putInt("position", position);
+                arg.putString("editTODO", todoItems.get(position).toString());
+                FragmentManager fm = getSupportFragmentManager();
+                EditTODODialog editTODODialog = EditTODODialog.newInstance("Edit TODO");
+                editTODODialog.setArguments(arg);
+                editTODODialog.show(fm, "Edit_TODO");
             }
         });
     }
+
 
 
     private void launchEditScreen (String todoItem, int position) {
@@ -128,5 +137,18 @@ public class DoIt extends AppCompatActivity {
     private void readTodoToFile () throws IOException {
         File file_TODOStuffFile = new File(getFilesDir(),"TODOStuff.txt");
         todoItems = new ArrayList<String>(FileUtils.readLines(file_TODOStuffFile));
+    }
+
+    @Override
+    public void onFinishEditTodo(String editTODO, int position) {
+        todoItems.remove(position);
+        todoItems.add(position, editTODO);
+        todoAdapter.notifyDataSetChanged();
+        try {
+            writeTodoToFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Toast.makeText(this, "TODO updated.", Toast.LENGTH_SHORT).show();
     }
 }
