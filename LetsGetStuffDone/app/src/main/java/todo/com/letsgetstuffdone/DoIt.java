@@ -106,7 +106,7 @@ public class DoIt extends FragmentActivity implements EditTODODialog.EditTODOLis
         todoItems.remove(position);
         todoItems.add(position, updatedTODO);
         todoAdapter.notifyDataSetChanged();
-        Toast.makeText(this,"TODO list updated", Toast.LENGTH_LONG ).show();
+            Toast.makeText(this, "TODO list updated", Toast.LENGTH_SHORT).show();
         try {
             writeTodoToFile();
         } catch (IOException e) {
@@ -118,15 +118,18 @@ public class DoIt extends FragmentActivity implements EditTODODialog.EditTODOLis
     // Event called when addToDo button is submitted
     public void addTODOtoList(View view) {
         editText = (EditText)findViewById(R.id.editText);
-        if (!editText.toString().equals("")) {
+        if (!editText.getText().toString().equals("")) {
             todoAdapter.add(editText.getText().toString());
             editText.setText("");
+            try {
+                writeTodoToFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Toast.makeText(DoIt.this, "Can't be blank", Toast.LENGTH_SHORT).show();
         }
-        try {
-            writeTodoToFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
     }
 
     private void writeTodoToFile () throws IOException {
